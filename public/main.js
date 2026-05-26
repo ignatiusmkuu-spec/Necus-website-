@@ -186,6 +186,26 @@ function copyCode(btn) {
   loop();
 })();
 
+// ---- GITHUB STATS TICKER ----
+(async function fetchGitHubStats() {
+  try {
+    const res = await fetch('https://api.github.com/repos/ignatiusmkuu-spec/IgniteBot');
+    if (!res.ok) return;
+    const data = await res.json();
+    const stars = data.stargazers_count?.toLocaleString() ?? '—';
+    const forks = data.forks_count?.toLocaleString() ?? '—';
+    const watchers = data.subscribers_count?.toLocaleString() ?? '—';
+
+    document.getElementById('gh-stars').textContent = stars;
+    document.getElementById('gh-forks').textContent = forks;
+    document.getElementById('gh-watchers').textContent = watchers;
+
+    document.querySelectorAll('.gh-stars-clone').forEach(el => el.textContent = stars);
+    document.querySelectorAll('.gh-forks-clone').forEach(el => el.textContent = forks);
+    document.querySelectorAll('.gh-watchers-clone').forEach(el => el.textContent = watchers);
+  } catch (_) {}
+})();
+
 // ---- TERMINAL TYPEWRITER ----
 (function () {
   const lines = document.querySelectorAll('#terminal-body .t-line');

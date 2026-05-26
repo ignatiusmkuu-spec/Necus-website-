@@ -77,6 +77,77 @@ body::after {
 .accent { color: var(--cyan); }
 
 /* ============================
+   TICKER BAR
+   ============================ */
+.ticker-bar {
+  position: fixed;
+  top: 70px;
+  left: 0; right: 0;
+  z-index: 999;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0,255,255,0.08);
+  border-bottom: 1px solid rgba(0,255,255,0.15);
+  overflow: hidden;
+  height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+.ticker-track {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  animation: ticker-scroll 40s linear infinite;
+  will-change: transform;
+}
+
+.ticker-track:hover { animation-play-state: paused; }
+
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+}
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-title);
+  font-size: 0.68rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0 1.4rem;
+}
+
+.ticker-item strong { color: var(--cyan); font-weight: 700; }
+
+.ticker-live {
+  color: #28c840 !important;
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.ticker-icon { font-size: 0.8rem; }
+
+.ticker-sep {
+  color: rgba(0,255,255,0.25);
+  font-size: 0.5rem;
+  padding: 0 0.2rem;
+}
+
+/* ============================
    NAV
    ============================ */
 .nav {
@@ -378,7 +449,7 @@ section {
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 120px 2rem 80px;
+  padding: 160px 2rem 80px;
 }
 
 .hero-badge {
