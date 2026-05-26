@@ -289,3 +289,16 @@ function copyQI(btn, text) {
     }, 300 + i * 300);
   });
 })();
+
+// ---- TOOLTIP COPY URL ----
+function copyTooltipUrl(btn, url) {
+  navigator.clipboard.writeText(url).then(() => {
+    const svg = btn.querySelector('svg');
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = svg.outerHTML;
+    }, 1800);
+  });
+}

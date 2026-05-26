@@ -809,6 +809,43 @@ section {
   transform: translateX(-50%) translateY(0);
 }
 
+.deploy-tooltip,
+.fab-tooltip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tooltip-url {
+  flex: 1;
+}
+
+.tooltip-copy-btn {
+  background: rgba(0, 200, 255, 0.12);
+  border: 1px solid rgba(0, 200, 255, 0.3);
+  border-radius: 4px;
+  color: #00ccff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 5px;
+  flex-shrink: 0;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  pointer-events: all;
+}
+
+.tooltip-copy-btn:hover {
+  background: rgba(0, 200, 255, 0.25);
+  border-color: #00ccff;
+}
+
+.tooltip-copy-btn.copied {
+  color: #00ff99;
+  border-color: #00ff99;
+  background: rgba(0, 255, 153, 0.12);
+}
+
 .btn-step.ghost {
   background: transparent;
   border-color: rgba(255,255,255,0.1);
