@@ -190,6 +190,74 @@ function copyCode(btn) {
   loop();
 })();
 
+// ---- MUSIC PLAYER ----
+(function () {
+  const audio = document.getElementById('bg-audio');
+  const btn = document.getElementById('music-btn');
+  const eq = document.getElementById('music-eq');
+  const offIcon = document.getElementById('music-off-icon');
+  let playing = false;
+
+  function setPlaying(state) {
+    playing = state;
+    if (playing) {
+      eq.style.display = 'flex';
+      eq.classList.remove('paused');
+      offIcon.style.display = 'none';
+      audio.play().catch(() => {});
+    } else {
+      eq.classList.add('paused');
+      offIcon.style.display = 'block';
+      eq.style.display = 'none';
+      audio.pause();
+    }
+  }
+
+  btn.addEventListener('click', () => setPlaying(!playing));
+
+  // Try autoplay on first user interaction with the page
+  const tryAutoplay = () => {
+    audio.volume = 0.4;
+    audio.play().then(() => {
+      playing = true;
+      eq.style.display = 'flex';
+      eq.classList.remove('paused');
+      offIcon.style.display = 'none';
+    }).catch(() => {});
+    document.removeEventListener('click', tryAutoplay);
+    document.removeEventListener('keydown', tryAutoplay);
+    document.removeEventListener('scroll', tryAutoplay);
+  };
+
+  audio.volume = 0.4;
+  // Attempt silent autoplay first (works if browser permits)
+  audio.play().then(() => {
+    playing = true;
+    eq.style.display = 'flex';
+    eq.classList.remove('paused');
+    offIcon.style.display = 'none';
+  }).catch(() => {
+    // Blocked — wait for first interaction
+    eq.classList.add('paused');
+    document.addEventListener('click', tryAutoplay, { once: true });
+    document.addEventListener('keydown', tryAutoplay, { once: true });
+    document.addEventListener('scroll', tryAutoplay, { once: true });
+  });
+})();
+
+// ---- QUICK INSTALL COPY ----
+function copyQI(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    const orig = btn.innerHTML;
+    btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#28c840" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+    setTimeout(() => {
+      btn.innerHTML = orig;
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
 // ---- GITHUB STATS TICKER ----
 (async function fetchGitHubStats() {
   try {

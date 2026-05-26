@@ -384,6 +384,47 @@
     </div>
   </section>
 
+  <!-- QUICK INSTALL -->
+  <section class="quick-install">
+    <div class="qi-inner">
+      <div class="qi-label">
+        <span class="qi-dot"></span>
+        Quick Install
+      </div>
+      <div class="qi-steps">
+        <div class="qi-step">
+          <span class="qi-num">1</span>
+          <div class="qi-code-wrap">
+            <code class="qi-code">git clone https://github.com/ignatiusmkuu-spec/IgniteBot</code>
+            <button class="qi-copy" onclick="copyQI(this,'git clone https://github.com/ignatiusmkuu-spec/IgniteBot')" aria-label="Copy">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="qi-arrow">→</div>
+        <div class="qi-step">
+          <span class="qi-num">2</span>
+          <div class="qi-code-wrap">
+            <code class="qi-code">npm install</code>
+            <button class="qi-copy" onclick="copyQI(this,'npm install')" aria-label="Copy">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="qi-arrow">→</div>
+        <div class="qi-step">
+          <span class="qi-num">3</span>
+          <div class="qi-code-wrap">
+            <code class="qi-code">node index.js</code>
+            <button class="qi-copy" onclick="copyQI(this,'node index.js')" aria-label="Copy">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CONNECT / CTA -->
   <section class="connect" id="connect">
     <div class="connect-inner">
@@ -425,6 +466,17 @@
       </div>
     </div>
   </footer>
+
+  <!-- BACKGROUND MUSIC -->
+  <audio id="bg-audio" src="bg-music.mp3" loop preload="auto"></audio>
+
+  <!-- MUSIC TOGGLE -->
+  <button class="music-btn" id="music-btn" title="Toggle music" aria-label="Toggle background music">
+    <span class="music-eq" id="music-eq">
+      <span></span><span></span><span></span><span></span>
+    </span>
+    <svg class="music-off-icon" id="music-off-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+  </button>
 
   <!-- FLOATING ACTION BUTTON -->
   <a href="https://nexus-session-76ah.onrender.com/pair" target="_blank" class="fab" id="fab" title="Deploy Now">
