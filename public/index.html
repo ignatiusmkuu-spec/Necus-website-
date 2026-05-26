@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXUS-MD • WhatsApp Bot Redefined</title>
+  <meta name="description" content="NEXUS-MD — The most powerful WhatsApp bot. AI chat, media tools, group guard, live scores and more. Deploy in 3 steps." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated canvas background -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">NEXUS<span class="accent">-MD</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#deploy">Deploy</a>
+        <a href="#commands">Commands</a>
+        <a href="#connect">Contact</a>
+      </div>
+      <a href="https://nexus-session-76ah.onrender.com/pair" target="_blank" class="btn-nav">Get Session</a>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="#features">Features</a>
+      <a href="#deploy">Deploy</a>
+      <a href="#commands">Commands</a>
+      <a href="#connect">Contact</a>
+      <a href="https://nexus-session-76ah.onrender.com/pair" target="_blank" class="btn-nav">Get Session</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span>v1.0 • Now Live</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="hero-line">WHATSAPP BOT</span>
+        <span class="hero-line accent-gradient">REDEFINED</span>
+      </h1>
+      <p class="hero-sub">
+        NEXUS-MD is the next-generation WhatsApp automation bot — powered by AI, armed with 50+ commands, and engineered to run anywhere.
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num" data-target="50">0</span><span>+</span>
+          <span class="stat-label">Commands</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num" data-target="3">0</span>
+          <span class="stat-label">Steps to Deploy</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num" data-target="24">0</span><span>/7</span>
+          <span class="stat-label">Always Online</span>
+        </div>
+      </div>
+      <div class="hero-ctas">
+        <a href="https://nexus-session-76ah.onrender.com/pair" target="_blank" class="btn-primary">
+          <span class="btn-glow"></span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Get Pair Code
+        </a>
+        <a href="https://nexus-session-76ah.onrender.com/wasiqr" target="_blank" class="btn-secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="4" height="4"/></svg>
+          Scan QR Code
+        </a>
+        <a href="https://github.com/ignatiusmkuu-spec/IgniteBot" target="_blank" class="btn-ghost">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="terminal-card">
+        <div class="terminal-bar">
+          <span class="t-dot red"></span>
+          <span class="t-dot yellow"></span>
+          <span class="t-dot green"></span>
+          <span class="t-title">nexus-md terminal</span>
+        </div>
+        <div class="terminal-body" id="terminal-body">
+          <div class="t-line"><span class="t-prompt">$</span> <span class="t-cmd">node index.js</span></div>
+          <div class="t-line t-success">✓ NEXUS-MD v1.0 started</div>
+          <div class="t-line t-info">⚡ Loading 50+ commands...</div>
+          <div class="t-line t-success">✓ AI engine connected</div>
+          <div class="t-line t-info">📡 Connecting to WhatsApp...</div>
+          <div class="t-line t-success">✓ Session authenticated</div>
+          <div class="t-line t-success">✓ Group guard active</div>
+          <div class="t-line t-info">🛡 Anti-delete watching...</div>
+          <div class="t-line t-success">✓ Bot is ONLINE &amp; ready</div>
+          <div class="t-line t-cursor"><span class="t-prompt">$</span> <span class="cursor-blink">_</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="section-header">
+      <span class="section-tag">CAPABILITIES</span>
+      <h2 class="section-title">Everything You Need.<br /><span class="accent-gradient">Nothing You Don't.</span></h2>
+      <p class="section-sub">50+ commands across AI, media, groups, and fun — deployed once, runs forever.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card glow-cyan">
+        <div class="feature-icon">🤖</div>
+        <h3>AI Chat</h3>
+        <p>Ask anything. NEXUS-MD is wired into powerful AI engines to answer questions, generate content, and hold conversations.</p>
+      </div>
+      <div class="feature-card glow-purple">
+        <div class="feature-icon">📥</div>
+        <h3>Media Download</h3>
+        <p>Download YouTube audio, videos, TikToks, and more with a single command. Share media in seconds.</p>
+      </div>
+      <div class="feature-card glow-cyan">
+        <div class="feature-icon">🛡</div>
+        <h3>Group Guard</h3>
+        <p>Auto-moderate your groups. Anti-link, anti-spam, welcome/goodbye messages, and tag-all functionality built in.</p>
+      </div>
+      <div class="feature-card glow-purple">
+        <div class="feature-icon">🚫</div>
+        <h3>Anti-Delete</h3>
+        <p>Never miss a deleted message again. NEXUS-MD automatically recovers and forwards deleted content to you.</p>
+      </div>
+      <div class="feature-card glow-cyan">
+        <div class="feature-icon">👁</div>
+        <h3>View-Once Reveal</h3>
+        <p>Reveal view-once photos and videos. Save disappearing media before it's gone.</p>
+      </div>
+      <div class="feature-card glow-purple">
+        <div class="feature-icon">🔴</div>
+        <h3>EPL Live Scores</h3>
+        <p>Get real-time English Premier League match scores delivered directly in your WhatsApp chat.</p>
+      </div>
+      <div class="feature-card glow-cyan">
+        <div class="feature-icon">🎨</div>
+        <h3>Sticker Maker</h3>
+        <p>Convert any image or video clip into a WhatsApp sticker instantly. No apps needed.</p>
+      </div>
+      <div class="feature-card glow-purple">
+        <div class="feature-icon">⏱</div>
+        <h3>Always Online</h3>
+        <p>Set your WhatsApp to appear always online, auto-read messages, and auto-type — 24/7 presence.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPLOY -->
+  <section class="deploy" id="deploy">
+    <div class="section-header">
+      <span class="section-tag">DEPLOYMENT</span>
+      <h2 class="section-title">Up and Running in<br /><span class="accent-gradient">3 Steps.</span></h2>
+      <p class="section-sub">Fork, pair, and deploy. No experience required.</p>
+    </div>
+
+    <div class="steps-container">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h3>Fork the Repository</h3>
+          <p>Fork the NEXUS-MD repo to your GitHub account. One click gets you the full bot codebase.</p>
+          <a href="https://github.com/ignatiusmkuu-spec/IgniteBot/fork" target="_blank" class="btn-step">
+            Fork on GitHub
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="step-connector">
+        <div class="connector-line"></div>
+        <div class="connector-dot"></div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h3>Get Your Session ID</h3>
+          <p>Visit the NEXUS pairing terminal to link your WhatsApp number and generate a session ID.</p>
+          <div class="step-btns">
+            <a href="https://nexus-session-76ah.onrender.com/pair" target="_blank" class="btn-step">
+              Pair Code
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="https://nexus-session-76ah.onrender.com/wasiqr" target="_blank" class="btn-step ghost">
+              QR Code
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-connector">
+        <div class="connector-line"></div>
+        <div class="connector-dot"></div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h3>Deploy &amp; Go Live</h3>
+          <p>Deploy to Heroku, a VPS, or any panel. Set <code>SESSION_ID</code> and <code>ADMIN_NUMBERS</code> in config vars and you're live.</p>
+          <a href="https://verification-rho-ten.vercel.app/" target="_blank" class="btn-step primary">
+            Deploy to Heroku
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="deploy-alt">
+      <p>Running a panel (Pterodactyl / cPanel / VPS)?</p>
+      <div class="code-block">
+        <div class="code-header">
+          <span>bash</span>
+          <button class="copy-btn" onclick="copyCode(this)" data-code="bash scripts/panel.sh">Copy</button>
+        </div>
+        <pre><code><span class="c-comment"># Download ZIP, upload &amp; extract, then run:</span>
+<span class="c-cmd">bash</span> scripts/panel.sh</code></pre>
+      </div>
+      <p class="deploy-note">The script auto-installs dependencies and starts the bot. No extra setup needed.</p>
+    </div>
+  </section>
+
+  <!-- COMMANDS -->
+  <section class="commands" id="commands">
+    <div class="section-header">
+      <span class="section-tag">COMMANDS</span>
+      <h2 class="section-title">Key Commands<br /><span class="accent-gradient">at a Glance.</span></h2>
+      <p class="section-sub">Send <code>.menu</code> in any WhatsApp chat to see all 50+ commands.</p>
+    </div>
+
+    <div class="commands-grid">
+      <div class="cmd-card">
+        <span class="cmd-name">.ai [text]</span>
+        <span class="cmd-desc">Chat with AI</span>
+      </div>
+      <div class="cmd-card">
+        <span class="cmd-name">.menu</span>
+        <span class="cmd-desc">Full command list</span>
+      </div>
+      <div class="cmd-card">
+        <span class="cmd-name">.ping</span>
+        <span class="cmd-desc">Bot status &amp; latency</span>
+      </div>
+      <div class="cmd-card">
+        <span class="cmd-name">.sticker</span>
+        <span class="cmd-desc">Media → sticker</span>
+      </div>
+      <div class="cmd-card">
+        <span class="cmd-name">.yt [url]</span>
+        <span class="cmd-desc">YouTube audio download</span>
+      </div>
+      <div class="cmd-card">
+        <span class="cmd-name">.epl</span>
+        <span class="cmd-desc">Live EPL scores</span>
+      </div>
+      <div class="cmd-card">
+        <span class="cmd-name">.tagall</span>
+        <span class="cmd-desc">Tag all group members</span>
+      </div>
+      <div class="cmd-card">
+        <span class="cmd-name">.antidelete on</span>
+        <span class="cmd-desc">Recover deleted msgs</span>
+      </div>
+      <div class="cmd-card">
+        <span class="cmd-name">.alive</span>
+        <span class="cmd-desc">Check bot is running</span>
+      </div>
+      <div class="cmd-card">
+        <span class="cmd-name">.tts [text]</span>
+        <span class="cmd-desc">Text to speech</span>
+      </div>
+      <div class="cmd-card">
+        <span class="cmd-name">.kick @user</span>
+        <span class="cmd-desc">Remove from group</span>
+      </div>
+      <div class="cmd-card">
+        <span class="cmd-name">.weather [city]</span>
+        <span class="cmd-desc">Weather forecast</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONFIG TABLE -->
+  <section class="config" id="config">
+    <div class="section-header">
+      <span class="section-tag">CONFIGURATION</span>
+      <h2 class="section-title">Environment<br /><span class="accent-gradient">Variables.</span></h2>
+    </div>
+    <div class="table-wrap">
+      <table class="config-table">
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Description</th>
+            <th>Required</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>SESSION_ID</code></td>
+            <td>Your WhatsApp session from the pairing terminal</td>
+            <td><span class="tag-required">Required</span></td>
+          </tr>
+          <tr>
+            <td><code>ADMIN_NUMBERS</code></td>
+            <td>Your number e.g. <code>254706535581</code></td>
+            <td><span class="tag-required">Required</span></td>
+          </tr>
+          <tr>
+            <td><code>PORT</code></td>
+            <td>Dashboard port (default: <code>5000</code>)</td>
+            <td><span class="tag-optional">Optional</span></td>
+          </tr>
+          <tr>
+            <td><code>DATABASE_URL</code></td>
+            <td>PostgreSQL URL — local file used if blank</td>
+            <td><span class="tag-optional">Optional</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CONNECT / CTA -->
+  <section class="connect" id="connect">
+    <div class="connect-inner">
+      <div class="connect-glow"></div>
+      <span class="section-tag">GET STARTED</span>
+      <h2 class="connect-title">Ready to Power Up<br />Your WhatsApp?</h2>
+      <p class="connect-sub">Join the community, get your session, and go live in minutes.</p>
+      <div class="connect-buttons">
+        <a href="https://nexus-session-76ah.onrender.com/pair" target="_blank" class="btn-primary large">
+          <span class="btn-glow"></span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Get Pair Code
+        </a>
+        <a href="https://wa.me/25478134624?text=Hi%20PEREZ" target="_blank" class="btn-whatsapp large">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Contact Creator
+        </a>
+        <a href="https://github.com/ignatiusmkuu-spec/IgniteBot" target="_blank" class="btn-ghost large">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+          View on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">NEXUS<span class="accent">-MD</span></span>
+      </div>
+      <p class="footer-copy">Built by <a href="https://github.com/ignatiusmkuu-spec" target="_blank">Ignatius Perez</a> · MIT License</p>
+      <div class="footer-links">
+        <a href="https://github.com/ignatiusmkuu-spec/IgniteBot" target="_blank">GitHub</a>
+        <a href="https://nexus-session-76ah.onrender.com/pair" target="_blank">Pair Code</a>
+        <a href="https://nexus-session-76ah.onrender.com/wasiqr" target="_blank">QR Code</a>
+        <a href="https://wa.me/25478134624?text=Hi%20PEREZ" target="_blank">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
