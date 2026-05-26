@@ -1155,6 +1155,189 @@ section {
 .music-off-icon { color: var(--text-muted); }
 
 /* ============================
+   CREATOR CARD
+   ============================ */
+.creator-section {
+  padding: 60px 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.creator-card {
+  position: relative;
+  max-width: 760px;
+  width: 100%;
+  background: rgba(5,5,20,0.7);
+  border: 1px solid rgba(0,255,255,0.2);
+  border-radius: 20px;
+  padding: 2.5rem 2.5rem 2.5rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.creator-card:hover {
+  border-color: rgba(0,255,255,0.4);
+  box-shadow: 0 0 60px rgba(0,255,255,0.1), 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.creator-glow {
+  position: absolute;
+  top: -60px; left: -60px;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(0,255,255,0.12), transparent 70%);
+  pointer-events: none;
+}
+
+/* Avatar */
+.creator-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.creator-ring {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: linear-gradient(135deg, var(--cyan), var(--magenta)) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  animation: ring-spin 6s linear infinite;
+}
+
+@keyframes ring-spin {
+  to { transform: rotate(360deg); }
+}
+
+.creator-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  background: var(--dark3);
+}
+
+.creator-status-dot {
+  position: absolute;
+  bottom: 4px; right: 4px;
+  width: 14px; height: 14px;
+  background: #28c840;
+  border-radius: 50%;
+  border: 2px solid var(--dark);
+  box-shadow: 0 0 8px #28c840;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Info */
+.creator-info { flex: 1; min-width: 0; }
+
+.creator-tag {
+  display: inline-block;
+  font-family: var(--font-title);
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 0.4rem;
+}
+
+.creator-name {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+}
+
+.creator-bio {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.7;
+  margin-bottom: 1.4rem;
+}
+
+.creator-links {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.creator-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0.55rem 1.1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-family: var(--font-title);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: all 0.25s;
+}
+
+.creator-btn.whatsapp {
+  background: #25d366;
+  color: #fff;
+}
+
+.creator-btn.whatsapp:hover {
+  background: #20ba57;
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(37,211,102,0.45);
+}
+
+.creator-btn.github {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text-muted);
+}
+
+.creator-btn.github:hover {
+  border-color: rgba(255,255,255,0.3);
+  color: var(--text);
+  transform: translateY(-2px);
+}
+
+/* Pill badge */
+.creator-stat-pill {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-title);
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  background: rgba(0,255,255,0.07);
+  border: 1px solid rgba(0,255,255,0.18);
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+}
+
+@media (max-width: 600px) {
+  .creator-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 1.5rem;
+  }
+  .creator-links { justify-content: center; }
+  .creator-stat-pill { position: static; margin-bottom: 1rem; }
+  .creator-glow { display: none; }
+}
+
+/* ============================
    QUICK INSTALL STRIP
    ============================ */
 .quick-install {
