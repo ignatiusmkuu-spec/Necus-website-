@@ -2,11 +2,15 @@
    NEXUS-MD — Main Script
    ============================ */
 
-// ---- NAV SCROLL ----
+// ---- NAV SCROLL + FAB SHOW ----
 const navbar = document.getElementById('navbar');
+const fab = document.getElementById('fab');
 window.addEventListener('scroll', () => {
   if (window.scrollY > 40) navbar.classList.add('scrolled');
   else navbar.classList.remove('scrolled');
+
+  if (window.scrollY > 300) fab.classList.add('visible');
+  else fab.classList.remove('visible');
 });
 
 // ---- HAMBURGER MENU ----
