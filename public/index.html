@@ -261,10 +261,13 @@
         <div class="step-content">
           <h3>Deploy &amp; Go Live</h3>
           <p>Deploy to Heroku, a VPS, or any panel. Set <code>SESSION_ID</code> and <code>ADMIN_NUMBERS</code> in config vars and you're live.</p>
-          <a href="https://verification-rho-ten.vercel.app/" target="_blank" class="btn-step primary">
-            Deploy to Heroku
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
+          <span class="deploy-tooltip-wrap">
+            <a href="https://verification-rho-ten.vercel.app/" target="_blank" class="btn-step primary">
+              Deploy to Heroku
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <span class="deploy-tooltip">https://verification-rho-ten.vercel.app/</span>
+          </span>
         </div>
       </div>
     </div>
@@ -509,12 +512,15 @@
   </button>
 
   <!-- FLOATING ACTION BUTTON -->
-  <a href="https://nexus-session-76ah.onrender.com/pair" target="_blank" class="fab" id="fab" title="Deploy Now">
-    <span class="fab-ring"></span>
-    <span class="fab-ring fab-ring-2"></span>
-    <svg class="fab-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-    <span class="fab-label">Deploy</span>
-  </a>
+  <span class="fab-tooltip-wrap">
+    <a href="https://nexus-session-76ah.onrender.com/pair" target="_blank" class="fab" id="fab">
+      <span class="fab-ring"></span>
+      <span class="fab-ring fab-ring-2"></span>
+      <svg class="fab-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      <span class="fab-label">Deploy</span>
+    </a>
+    <span class="fab-tooltip">nexus-session-76ah.onrender.com/pair</span>
+  </span>
 
   <script src="main.js"></script>
 </body>

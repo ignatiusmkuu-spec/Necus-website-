@@ -769,6 +769,46 @@ section {
   box-shadow: 0 0 20px rgba(0,180,255,0.4);
 }
 
+.deploy-tooltip-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.deploy-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(0, 8, 20, 0.95);
+  border: 1px solid rgba(0, 200, 255, 0.35);
+  color: #00ccff;
+  font-size: 0.72rem;
+  font-family: 'Courier New', monospace;
+  white-space: nowrap;
+  padding: 5px 10px;
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 0 12px rgba(0, 180, 255, 0.2);
+  z-index: 100;
+}
+
+.deploy-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(0, 200, 255, 0.35);
+}
+
+.deploy-tooltip-wrap:hover .deploy-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 .btn-step.ghost {
   background: transparent;
   border-color: rgba(255,255,255,0.1);
@@ -1459,11 +1499,49 @@ section {
 /* ============================
    FLOATING ACTION BUTTON
    ============================ */
-.fab {
+.fab-tooltip-wrap {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
   z-index: 2000;
+  display: inline-block;
+}
+
+.fab-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  background: rgba(0, 8, 20, 0.95);
+  border: 1px solid rgba(0, 200, 255, 0.35);
+  color: #00ccff;
+  font-size: 0.72rem;
+  font-family: 'Courier New', monospace;
+  white-space: nowrap;
+  padding: 5px 10px;
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 0 12px rgba(0, 180, 255, 0.2);
+}
+
+.fab-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  right: 18px;
+  border: 5px solid transparent;
+  border-top-color: rgba(0, 200, 255, 0.35);
+}
+
+.fab-tooltip-wrap:hover .fab-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fab {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
