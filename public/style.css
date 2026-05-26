@@ -33,13 +33,37 @@ body {
   line-height: 1.6;
 }
 
+/* Fixed full-screen background image */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: url('bg.jpg') center center / cover no-repeat;
+  filter: brightness(0.35) saturate(1.2);
+}
+
+/* Dark overlay to keep text readable */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(5,5,16,0.55) 0%,
+    rgba(5,5,16,0.3) 50%,
+    rgba(5,5,16,0.65) 100%
+  );
+}
+
 #bg-canvas {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.45;
 }
 
 /* ---- ACCENT GRADIENT ---- */
