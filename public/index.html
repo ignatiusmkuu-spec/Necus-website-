@@ -461,6 +461,18 @@
       </div>
     </div>
 
+    <!-- DEPLOY HISTORY PANEL -->
+    <div class="deploy-history-panel" id="deploy-history-panel" style="display:none">
+      <div class="dhp-header">
+        <div class="dhp-title-row">
+          <span class="qdp-tag" style="margin:0">DEPLOY HISTORY</span>
+          <span class="dhp-count" id="dhp-count"></span>
+        </div>
+        <button class="dhp-clear-btn" onclick="dhpClearAll()">Clear All</button>
+      </div>
+      <div class="dhp-list" id="dhp-list"></div>
+    </div>
+
     <div class="deploy-alt">
       <p>Running a panel (Pterodactyl / cPanel / VPS)?</p>
       <div class="code-block">

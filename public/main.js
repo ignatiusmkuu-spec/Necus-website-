@@ -290,6 +290,112 @@ function copyQI(btn, text) {
   });
 })();
 
+// ---- DEPLOY HISTORY ----
+const DHC_KEY = 'nexus_deploy_history';
+const DHC_MAX = 10;
+
+function dhpLoad() {
+  try { return JSON.parse(localStorage.getItem(DHC_KEY) || '[]'); }
+  catch { return []; }
+}
+
+function dhpSave(entries) {
+  localStorage.setItem(DHC_KEY, JSON.stringify(entries));
+}
+
+function dhpAdd(entry) {
+  const entries = dhpLoad();
+  entries.unshift(entry);
+  if (entries.length > DHC_MAX) entries.length = DHC_MAX;
+  dhpSave(entries);
+  dhpRender();
+}
+
+function dhpUpdateStatus(buildId, status) {
+  const entries = dhpLoad();
+  const idx = entries.findIndex(e => e.buildId === buildId);
+  if (idx !== -1) { entries[idx].status = status; dhpSave(entries); }
+  dhpRender();
+}
+
+function dhpStatusIcon(status) {
+  if (status === 'succeeded') return `<div class="dhp-status-icon success"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#28c840" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>`;
+  if (status === 'failed')    return `<div class="dhp-status-icon failed"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>`;
+  return `<div class="dhp-status-icon pending"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00ffff" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>`;
+}
+
+function dhpFormatDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+function dhpRender() {
+  const panel = document.getElementById('deploy-history-panel');
+  const list  = document.getElementById('dhp-list');
+  const count = document.getElementById('dhp-count');
+  const entries = dhpLoad();
+
+  if (!entries.length) { panel.style.display = 'none'; return; }
+  panel.style.display = 'block';
+  count.textContent = `${entries.length} of ${DHC_MAX}`;
+
+  list.innerHTML = entries.map((e, i) => `
+    <div class="dhp-card">
+      ${dhpStatusIcon(e.status)}
+      <div class="dhp-info">
+        <div class="dhp-appname">${e.appName}</div>
+        <div class="dhp-meta">
+          <span class="dhp-date">${dhpFormatDate(e.deployedAt)}</span>
+          <span class="dhp-badge ${e.status}">${e.status}</span>
+        </div>
+      </div>
+      <div class="dhp-actions">
+        <button class="btn-dhp-redeploy" onclick="dhpReDeploy(${i})">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+          Re-deploy
+        </button>
+        <a href="${e.appUrl}" target="_blank" class="btn-dhp-link" title="Open app">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+        <button class="btn-dhp-delete" onclick="dhpDelete(${i})" title="Remove">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function dhpDelete(i) {
+  const entries = dhpLoad();
+  entries.splice(i, 1);
+  dhpSave(entries);
+  dhpRender();
+}
+
+function dhpClearAll() {
+  dhpSave([]);
+  dhpRender();
+}
+
+function dhpReDeploy(i) {
+  const entry = dhpLoad()[i];
+  if (!entry) return;
+  document.getElementById('quick-deploy').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(() => {
+    const select = document.getElementById('qdp-app-select');
+    if (select) {
+      const opt = [...select.options].find(o => o.value === entry.appName);
+      if (opt) {
+        select.value = entry.appName;
+        qdpAppSelected();
+      }
+    }
+  }, 600);
+}
+
+// Initialise history on load
+document.addEventListener('DOMContentLoaded', dhpRender);
+
 // ---- QUICK DEPLOY (Multi-step Heroku API) ----
 const QDP = {
   apiKey: null,
@@ -491,14 +597,22 @@ async function qdpDeploy() {
     `;
 
     qdpShow('qdp-step4');
-    if (data.outputStreamUrl) qdpStreamLog(data.outputStreamUrl);
+    dhpAdd({
+      appName: data.appName,
+      appUrl: data.appUrl,
+      dashboardUrl: data.dashboardUrl,
+      buildId: data.buildId,
+      deployedAt: new Date().toISOString(),
+      status: 'pending',
+    });
+    if (data.outputStreamUrl) qdpStreamLog(data.outputStreamUrl, data.buildId);
   } catch (err) {
     qdpSetStatus('qdp-status3', 'error', '⚠ Network error during deployment. Please try again.');
     btn.disabled = false;
   }
 }
 
-async function qdpStreamLog(streamUrl) {
+async function qdpStreamLog(streamUrl, buildId) {
   const logEl = document.getElementById('qdp-log-output');
   const badge = document.getElementById('qdp-build-badge');
   const links = document.getElementById('qdp-result-links');
@@ -518,6 +632,7 @@ async function qdpStreamLog(streamUrl) {
 
     if (!res.ok || !res.body) {
       logEl.textContent = 'Build log unavailable.';
+      if (buildId) dhpUpdateStatus(buildId, 'failed');
       return;
     }
 
@@ -531,10 +646,14 @@ async function qdpStreamLog(streamUrl) {
       logEl.textContent += chunk;
       logEl.scrollTop = logEl.scrollHeight;
       if (chunk.includes('Build succeeded')) success = true;
+      if (chunk.includes('Build failed'))    success = false;
     }
   } catch (err) {
     logEl.textContent += '\n[Stream connection lost]';
   }
+
+  const finalStatus = success ? 'succeeded' : 'failed';
+  if (buildId) dhpUpdateStatus(buildId, finalStatus);
 
   if (badge) {
     if (success) {
@@ -543,13 +662,17 @@ async function qdpStreamLog(streamUrl) {
       badge.style.borderColor = 'rgba(40,200,64,0.35)';
       badge.style.background = 'rgba(40,200,64,0.08)';
     } else {
-      badge.innerHTML = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> done`;
+      badge.innerHTML = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> failed`;
+      badge.style.color = '#ff6b6b';
+      badge.style.borderColor = 'rgba(255,107,107,0.35)';
+      badge.style.background = 'rgba(255,107,107,0.08)';
     }
   }
 
   if (title) {
-    title.innerHTML = title.innerHTML.replace('Deploying', 'Deployed');
-    title.innerHTML = title.innerHTML.replace('…', ' ✓');
+    title.innerHTML = title.innerHTML.replace('Deploying', success ? 'Deployed' : 'Deploy failed —');
+    title.innerHTML = title.innerHTML.replace('…', success ? ' ✓' : '');
+    if (!success) title.style.color = '#ff6b6b';
   }
 
   if (links) links.style.display = 'flex';
