@@ -133,6 +133,45 @@ app.post('/api/heroku/deploy', async (req, res) => {
   }
 });
 
+app.post('/api/heroku/build-log', async (req, res) => {
+  const { streamUrl } = req.body || {};
+  if (!streamUrl) return res.status(400).end();
+
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Transfer-Encoding', 'chunked');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('X-Accel-Buffering', 'no');
+
+  try {
+    const upstream = await fetch(streamUrl, {
+      headers: { Accept: 'application/vnd.heroku+json; version=3' },
+    });
+
+    if (!upstream.ok || !upstream.body) {
+      res.write('Build log unavailable.\n');
+      return res.end();
+    }
+
+    const reader = upstream.body.getReader();
+    const decoder = new TextDecoder();
+
+    const pump = async () => {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        res.write(decoder.decode(value, { stream: true }));
+      }
+      res.end();
+    };
+
+    req.on('close', () => reader.cancel());
+    await pump();
+  } catch (err) {
+    res.write('\n[Log stream ended]\n');
+    res.end();
+  }
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

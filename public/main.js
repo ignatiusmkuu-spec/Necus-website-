@@ -462,10 +462,22 @@ async function qdpDeploy() {
     document.getElementById('qdp-result-card').innerHTML = `
       <div class="qdp-result-title">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-        Bot deployed to <strong>${data.appName}</strong>!
+        Deploying <strong>${data.appName}</strong>…
       </div>
-      <p style="font-size:0.85rem;color:var(--text-muted)">Build is in progress on Heroku. It usually takes 2–3 minutes to go live.</p>
-      <div class="qdp-result-links">
+      <div class="qdp-build-terminal">
+        <div class="qdp-terminal-bar">
+          <span class="qdp-terminal-dot" style="background:#ff5f57"></span>
+          <span class="qdp-terminal-dot" style="background:#febc2e"></span>
+          <span class="qdp-terminal-dot" style="background:#28c840"></span>
+          <span class="qdp-terminal-title">heroku build log — ${data.appName}</span>
+          <span class="qdp-build-status-badge" id="qdp-build-badge">
+            <span class="qdp-spinner" style="width:10px;height:10px;border-width:1.5px"></span>
+            building
+          </span>
+        </div>
+        <pre class="qdp-log-output" id="qdp-log-output"><span class="qdp-log-dim">Connecting to build stream…</span>\n</pre>
+      </div>
+      <div class="qdp-result-links" id="qdp-result-links" style="display:none">
         <a href="${data.appUrl}" target="_blank" class="btn-qdp-result primary">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           Open App
@@ -475,14 +487,72 @@ async function qdpDeploy() {
           Heroku Dashboard
         </a>
       </div>
-      <p class="qdp-result-note">Build ID: ${data.buildId} · Status: ${data.buildStatus}</p>
+      <p class="qdp-result-note">Build ID: ${data.buildId}</p>
     `;
 
     qdpShow('qdp-step4');
+    if (data.outputStreamUrl) qdpStreamLog(data.outputStreamUrl);
   } catch (err) {
     qdpSetStatus('qdp-status3', 'error', '⚠ Network error during deployment. Please try again.');
     btn.disabled = false;
   }
+}
+
+async function qdpStreamLog(streamUrl) {
+  const logEl = document.getElementById('qdp-log-output');
+  const badge = document.getElementById('qdp-build-badge');
+  const links = document.getElementById('qdp-result-links');
+  const title = document.querySelector('.qdp-result-title');
+
+  if (!logEl) return;
+  logEl.textContent = '';
+
+  let success = false;
+
+  try {
+    const res = await fetch('/api/heroku/build-log', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ streamUrl }),
+    });
+
+    if (!res.ok || !res.body) {
+      logEl.textContent = 'Build log unavailable.';
+      return;
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value, { stream: true });
+      logEl.textContent += chunk;
+      logEl.scrollTop = logEl.scrollHeight;
+      if (chunk.includes('Build succeeded')) success = true;
+    }
+  } catch (err) {
+    logEl.textContent += '\n[Stream connection lost]';
+  }
+
+  if (badge) {
+    if (success) {
+      badge.innerHTML = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#28c840" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> succeeded`;
+      badge.style.color = '#28c840';
+      badge.style.borderColor = 'rgba(40,200,64,0.35)';
+      badge.style.background = 'rgba(40,200,64,0.08)';
+    } else {
+      badge.innerHTML = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> done`;
+    }
+  }
+
+  if (title) {
+    title.innerHTML = title.innerHTML.replace('Deploying', 'Deployed');
+    title.innerHTML = title.innerHTML.replace('…', ' ✓');
+  }
+
+  if (links) links.style.display = 'flex';
 }
 
 function qdpReset() {
