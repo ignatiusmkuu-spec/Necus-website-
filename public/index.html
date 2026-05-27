@@ -360,39 +360,104 @@
     <div class="quick-deploy-panel" id="quick-deploy">
       <div class="qdp-header">
         <span class="qdp-tag">QUICK DEPLOY</span>
-        <h3 class="qdp-title">Deploy in One Click</h3>
-        <p class="qdp-sub">Paste your Session ID below and we'll pre-fill your Heroku config vars automatically.</p>
+        <h3 class="qdp-title">Deploy Directly from Here</h3>
+        <p class="qdp-sub">Connect your Heroku account and deploy the bot with your Session ID — no copy-paste needed.</p>
       </div>
-      <div class="qdp-form">
+
+      <!-- STEP 1: API Key -->
+      <div class="qdp-step" id="qdp-step1">
+        <div class="qdp-step-label">
+          <span class="qdp-step-num">1</span>
+          <span>Connect Your Heroku Account</span>
+        </div>
+        <div class="qdp-field">
+          <label class="qdp-label" for="qdp-apikey">Heroku API Key <span class="qdp-required">*</span></label>
+          <div class="qdp-input-row">
+            <input
+              id="qdp-apikey"
+              type="password"
+              class="qdp-input"
+              placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+              autocomplete="off"
+            />
+            <button class="btn-qdp-toggle-eye" type="button" onclick="qdpToggleKey()" title="Show/hide key">
+              <svg id="qdp-eye-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="qdp-hint">Find your API key at <a href="https://dashboard.heroku.com/account" target="_blank" class="qdp-link">dashboard.heroku.com/account</a> → API Key section.</div>
+        </div>
+        <div class="qdp-actions">
+          <button class="btn-qdp-connect" id="qdp-connect-btn" onclick="qdpConnect()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Connect to Heroku
+          </button>
+        </div>
+        <div class="qdp-status" id="qdp-status1"></div>
+      </div>
+
+      <!-- STEP 2: App Selection (hidden until connected) -->
+      <div class="qdp-step qdp-step-hidden" id="qdp-step2">
+        <div class="qdp-account-card" id="qdp-account-card"></div>
+        <div class="qdp-step-label">
+          <span class="qdp-step-num">2</span>
+          <span>Choose App</span>
+        </div>
+        <div class="qdp-field">
+          <label class="qdp-label" for="qdp-app-select">Target App</label>
+          <select id="qdp-app-select" class="qdp-select" onchange="qdpAppSelected()">
+            <option value="">— Create a new Heroku app —</option>
+          </select>
+          <div class="qdp-hint" id="qdp-app-hint">A new app will be created automatically.</div>
+        </div>
+        <div class="qdp-status" id="qdp-status2"></div>
+      </div>
+
+      <!-- STEP 3: Config (hidden until step 2 done) -->
+      <div class="qdp-step qdp-step-hidden" id="qdp-step3">
+        <div class="qdp-step-label">
+          <span class="qdp-step-num">3</span>
+          <span>Configure &amp; Deploy</span>
+        </div>
         <div class="qdp-field">
           <label class="qdp-label" for="qdp-session">Session ID <span class="qdp-required">*</span></label>
-          <textarea
-            id="qdp-session"
-            class="qdp-textarea"
-            rows="4"
-            placeholder="Paste your SESSION_ID here (e.g. nexus_auth_...)"
-            spellcheck="false"
-          ></textarea>
+          <div class="qdp-input-row">
+            <textarea
+              id="qdp-session"
+              class="qdp-textarea"
+              rows="3"
+              placeholder="Paste your SESSION_ID here (e.g. nexus_auth_...)"
+              spellcheck="false"
+            ></textarea>
+            <span class="qdp-autofilled-badge" id="qdp-session-badge" style="display:none">Auto-filled</span>
+          </div>
           <div class="qdp-hint">Get your session ID from the pairing terminal above (Step 02).</div>
         </div>
         <div class="qdp-field">
           <label class="qdp-label" for="qdp-phone">Admin Phone Number <span class="qdp-optional">(optional)</span></label>
-          <input
-            id="qdp-phone"
-            type="text"
-            class="qdp-input"
-            placeholder="e.g. 254712345678 (no + or spaces)"
-          />
+          <div class="qdp-input-row">
+            <input
+              id="qdp-phone"
+              type="text"
+              class="qdp-input"
+              placeholder="e.g. 254712345678 (no + or spaces)"
+            />
+            <span class="qdp-autofilled-badge" id="qdp-phone-badge" style="display:none">Auto-filled</span>
+          </div>
           <div class="qdp-hint">Your WhatsApp number in international format without the + sign.</div>
         </div>
         <div class="qdp-actions">
-          <button class="btn-qdp-deploy" onclick="quickDeploy()">
+          <button class="btn-qdp-deploy" id="qdp-deploy-btn" onclick="qdpDeploy()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
             Deploy to Heroku
           </button>
-          <button class="btn-qdp-clear" onclick="clearQuickDeploy()">Clear</button>
+          <button class="btn-qdp-clear" onclick="qdpReset()">Start Over</button>
         </div>
-        <div class="qdp-status" id="qdp-status"></div>
+        <div class="qdp-status" id="qdp-status3"></div>
+      </div>
+
+      <!-- STEP 4: Result (hidden until deployed) -->
+      <div class="qdp-step qdp-step-hidden" id="qdp-step4">
+        <div class="qdp-result-card" id="qdp-result-card"></div>
       </div>
     </div>
 

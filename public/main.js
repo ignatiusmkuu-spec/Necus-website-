@@ -290,37 +290,221 @@ function copyQI(btn, text) {
   });
 })();
 
-// ---- QUICK DEPLOY ----
-function quickDeploy() {
+// ---- QUICK DEPLOY (Multi-step Heroku API) ----
+const QDP = {
+  apiKey: null,
+  apps: [],
+};
+
+function qdpSetStatus(id, type, html) {
+  const el = document.getElementById(id);
+  el.className = `qdp-status ${type}`;
+  el.innerHTML = html;
+}
+
+function qdpClearStatus(id) {
+  const el = document.getElementById(id);
+  el.className = 'qdp-status';
+  el.innerHTML = '';
+}
+
+function qdpShow(id) { document.getElementById(id).classList.remove('qdp-step-hidden'); }
+function qdpHide(id) { document.getElementById(id).classList.add('qdp-step-hidden'); }
+
+function qdpToggleKey() {
+  const input = document.getElementById('qdp-apikey');
+  const icon = document.getElementById('qdp-eye-icon');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+  } else {
+    input.type = 'password';
+    icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+  }
+}
+
+async function qdpConnect() {
+  const apiKey = document.getElementById('qdp-apikey').value.trim();
+  if (!apiKey) {
+    qdpSetStatus('qdp-status1', 'error', '⚠ Please enter your Heroku API key.');
+    return;
+  }
+
+  const btn = document.getElementById('qdp-connect-btn');
+  btn.disabled = true;
+  qdpSetStatus('qdp-status1', 'loading', '<span class="qdp-spinner"></span> Connecting to Heroku…');
+
+  try {
+    const res = await fetch('/api/heroku/connect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ apiKey }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      qdpSetStatus('qdp-status1', 'error', `⚠ ${data.error}`);
+      btn.disabled = false;
+      return;
+    }
+
+    QDP.apiKey = apiKey;
+    QDP.apps = data.apps || [];
+
+    const initials = (data.account.name || data.account.email || '?')[0].toUpperCase();
+    document.getElementById('qdp-account-card').innerHTML = `
+      <div class="qdp-account-avatar">${initials}</div>
+      <div class="qdp-account-info">
+        <div class="qdp-account-name">${data.account.name || 'Heroku User'}</div>
+        <div class="qdp-account-email">${data.account.email}</div>
+      </div>
+      <div class="qdp-connected-dot"></div>
+    `;
+
+    const select = document.getElementById('qdp-app-select');
+    select.innerHTML = '<option value="">— Create a new Heroku app —</option>';
+    QDP.apps.forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a.name;
+      opt.textContent = a.name;
+      select.appendChild(opt);
+    });
+
+    qdpClearStatus('qdp-status1');
+    qdpShow('qdp-step2');
+    qdpShow('qdp-step3');
+    btn.textContent = '✓ Connected';
+    btn.disabled = true;
+  } catch (err) {
+    qdpSetStatus('qdp-status1', 'error', '⚠ Network error. Please try again.');
+    btn.disabled = false;
+  }
+}
+
+async function qdpAppSelected() {
+  const appName = document.getElementById('qdp-app-select').value;
+  const hint = document.getElementById('qdp-app-hint');
+  const sessionBadge = document.getElementById('qdp-session-badge');
+  const phoneBadge = document.getElementById('qdp-phone-badge');
+
+  document.getElementById('qdp-session').value = '';
+  document.getElementById('qdp-phone').value = '';
+  sessionBadge.style.display = 'none';
+  phoneBadge.style.display = 'none';
+
+  if (!appName) {
+    hint.textContent = 'A new app will be created automatically.';
+    qdpClearStatus('qdp-status2');
+    return;
+  }
+
+  hint.textContent = `Config vars will be updated on: ${appName}.`;
+  qdpSetStatus('qdp-status2', 'loading', '<span class="qdp-spinner"></span> Fetching config vars…');
+
+  try {
+    const res = await fetch('/api/heroku/config-vars', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ apiKey: QDP.apiKey, appName }),
+    });
+    const vars = await res.json();
+
+    if (!res.ok) {
+      qdpSetStatus('qdp-status2', 'error', `⚠ ${vars.error}`);
+      return;
+    }
+
+    if (vars.SESSION_ID) {
+      document.getElementById('qdp-session').value = vars.SESSION_ID;
+      sessionBadge.style.display = 'inline-flex';
+    }
+    if (vars.ADMIN_NUMBERS) {
+      document.getElementById('qdp-phone').value = vars.ADMIN_NUMBERS;
+      phoneBadge.style.display = 'inline-flex';
+    }
+
+    qdpSetStatus('qdp-status2', 'success', '✓ Config vars loaded from this app.');
+  } catch (err) {
+    qdpSetStatus('qdp-status2', 'error', '⚠ Could not load config vars.');
+  }
+}
+
+async function qdpDeploy() {
   const sessionId = document.getElementById('qdp-session').value.trim();
-  const phone = document.getElementById('qdp-phone').value.trim();
-  const status = document.getElementById('qdp-status');
+  const adminNumbers = document.getElementById('qdp-phone').value.trim();
+  const appName = document.getElementById('qdp-app-select').value || null;
 
   if (!sessionId) {
-    status.className = 'qdp-status error';
-    status.textContent = '⚠ Please paste your Session ID before deploying.';
+    qdpSetStatus('qdp-status3', 'error', '⚠ Session ID is required.');
     document.getElementById('qdp-session').focus();
     return;
   }
 
-  status.className = 'qdp-status success';
-  status.textContent = '✓ Opening Heroku deploy — your config vars are pre-filled.';
+  const btn = document.getElementById('qdp-deploy-btn');
+  btn.disabled = true;
+  qdpSetStatus('qdp-status3', 'loading', '<span class="qdp-spinner"></span> Deploying to Heroku — this may take a moment…');
 
-  const base = 'https://heroku.com/deploy';
-  const template = 'https://github.com/ignatiusmkuu-spec/IgniteBot';
-  const params = new URLSearchParams({ template });
-  params.set('env[SESSION_ID]', sessionId);
-  if (phone) params.set('env[ADMIN_NUMBERS]', phone);
+  try {
+    const res = await fetch('/api/heroku/deploy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ apiKey: QDP.apiKey, appName, sessionId, adminNumbers }),
+    });
+    const data = await res.json();
 
-  window.open(`${base}?${params.toString()}`, '_blank');
+    if (!res.ok) {
+      qdpSetStatus('qdp-status3', 'error', `⚠ ${data.error}`);
+      btn.disabled = false;
+      return;
+    }
+
+    qdpClearStatus('qdp-status3');
+    document.getElementById('qdp-result-card').innerHTML = `
+      <div class="qdp-result-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Bot deployed to <strong>${data.appName}</strong>!
+      </div>
+      <p style="font-size:0.85rem;color:var(--text-muted)">Build is in progress on Heroku. It usually takes 2–3 minutes to go live.</p>
+      <div class="qdp-result-links">
+        <a href="${data.appUrl}" target="_blank" class="btn-qdp-result primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Open App
+        </a>
+        <a href="${data.dashboardUrl}" target="_blank" class="btn-qdp-result ghost">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Heroku Dashboard
+        </a>
+      </div>
+      <p class="qdp-result-note">Build ID: ${data.buildId} · Status: ${data.buildStatus}</p>
+    `;
+
+    qdpShow('qdp-step4');
+  } catch (err) {
+    qdpSetStatus('qdp-status3', 'error', '⚠ Network error during deployment. Please try again.');
+    btn.disabled = false;
+  }
 }
 
-function clearQuickDeploy() {
+function qdpReset() {
+  QDP.apiKey = null;
+  QDP.apps = [];
+  document.getElementById('qdp-apikey').value = '';
+  document.getElementById('qdp-apikey').type = 'password';
+  document.getElementById('qdp-eye-icon').innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
   document.getElementById('qdp-session').value = '';
   document.getElementById('qdp-phone').value = '';
-  const status = document.getElementById('qdp-status');
-  status.className = 'qdp-status';
-  status.textContent = '';
+  document.getElementById('qdp-session-badge').style.display = 'none';
+  document.getElementById('qdp-phone-badge').style.display = 'none';
+  document.getElementById('qdp-account-card').innerHTML = '';
+  document.getElementById('qdp-result-card').innerHTML = '';
+  const connectBtn = document.getElementById('qdp-connect-btn');
+  connectBtn.disabled = false;
+  connectBtn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Connect to Heroku`;
+  document.getElementById('qdp-deploy-btn').disabled = false;
+  ['qdp-status1','qdp-status2','qdp-status3'].forEach(qdpClearStatus);
+  qdpHide('qdp-step2');
+  qdpHide('qdp-step3');
+  qdpHide('qdp-step4');
 }
 
 // ---- TOOLTIP COPY URL ----
