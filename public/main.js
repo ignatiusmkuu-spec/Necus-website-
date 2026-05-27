@@ -290,6 +290,39 @@ function copyQI(btn, text) {
   });
 })();
 
+// ---- QUICK DEPLOY ----
+function quickDeploy() {
+  const sessionId = document.getElementById('qdp-session').value.trim();
+  const phone = document.getElementById('qdp-phone').value.trim();
+  const status = document.getElementById('qdp-status');
+
+  if (!sessionId) {
+    status.className = 'qdp-status error';
+    status.textContent = '⚠ Please paste your Session ID before deploying.';
+    document.getElementById('qdp-session').focus();
+    return;
+  }
+
+  status.className = 'qdp-status success';
+  status.textContent = '✓ Opening Heroku deploy — your config vars are pre-filled.';
+
+  const base = 'https://heroku.com/deploy';
+  const template = 'https://github.com/ignatiusmkuu-spec/IgniteBot';
+  const params = new URLSearchParams({ template });
+  params.set('env[SESSION_ID]', sessionId);
+  if (phone) params.set('env[ADMIN_NUMBERS]', phone);
+
+  window.open(`${base}?${params.toString()}`, '_blank');
+}
+
+function clearQuickDeploy() {
+  document.getElementById('qdp-session').value = '';
+  document.getElementById('qdp-phone').value = '';
+  const status = document.getElementById('qdp-status');
+  status.className = 'qdp-status';
+  status.textContent = '';
+}
+
 // ---- TOOLTIP COPY URL ----
 function copyTooltipUrl(btn, url) {
   navigator.clipboard.writeText(url).then(() => {

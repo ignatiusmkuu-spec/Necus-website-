@@ -356,6 +356,46 @@
       </div>
     </div>
 
+    <!-- QUICK DEPLOY PANEL -->
+    <div class="quick-deploy-panel" id="quick-deploy">
+      <div class="qdp-header">
+        <span class="qdp-tag">QUICK DEPLOY</span>
+        <h3 class="qdp-title">Deploy in One Click</h3>
+        <p class="qdp-sub">Paste your Session ID below and we'll pre-fill your Heroku config vars automatically.</p>
+      </div>
+      <div class="qdp-form">
+        <div class="qdp-field">
+          <label class="qdp-label" for="qdp-session">Session ID <span class="qdp-required">*</span></label>
+          <textarea
+            id="qdp-session"
+            class="qdp-textarea"
+            rows="4"
+            placeholder="Paste your SESSION_ID here (e.g. nexus_auth_...)"
+            spellcheck="false"
+          ></textarea>
+          <div class="qdp-hint">Get your session ID from the pairing terminal above (Step 02).</div>
+        </div>
+        <div class="qdp-field">
+          <label class="qdp-label" for="qdp-phone">Admin Phone Number <span class="qdp-optional">(optional)</span></label>
+          <input
+            id="qdp-phone"
+            type="text"
+            class="qdp-input"
+            placeholder="e.g. 254712345678 (no + or spaces)"
+          />
+          <div class="qdp-hint">Your WhatsApp number in international format without the + sign.</div>
+        </div>
+        <div class="qdp-actions">
+          <button class="btn-qdp-deploy" onclick="quickDeploy()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+            Deploy to Heroku
+          </button>
+          <button class="btn-qdp-clear" onclick="clearQuickDeploy()">Clear</button>
+        </div>
+        <div class="qdp-status" id="qdp-status"></div>
+      </div>
+    </div>
+
     <div class="deploy-alt">
       <p>Running a panel (Pterodactyl / cPanel / VPS)?</p>
       <div class="code-block">
